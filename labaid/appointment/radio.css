@@ -1,0 +1,152 @@
+
+    label {
+      width: 80px !important;
+      border-radius: 3px !important;
+      border: 1px solid #fff !important;
+    }
+    .radio_test {
+    	clear: both;
+      margin-left: 5px;
+      display:inline-block;
+    }
+    /* hide input */
+    input[type="radio"].radio_1:empty {
+      margin-left: -77px !important;
+    }
+    /* style label */
+    input[type="radio"].radio_1:empty ~ label {
+      position: relative !important;
+      float: left !important;
+      line-height: 15px !important;
+      text-indent: 20px !important;
+      margin-top: 0px;
+      font-size: 12px !important;
+      cursor: pointer !important;
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+    }
+    input[type="radio"].radio_1:empty ~ label:before {
+      position: absolute !important;
+      display: block !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      content: '' !important;
+      width: 15px !important;
+      background: #D1D3D4 !important;
+      border-radius: 3px 0 0 3px !important;
+    }
+    /* toggle hover */
+    input[type="radio"].radio_1:hover:not(:checked) ~ label:before {
+      content:'\2714' !important;
+      text-indent: 2px !important;
+      color: #C2C2C2 !important;
+    }
+    input[type="radio"].radio_1:hover:not(:checked) ~ label {
+      color: #888 !important;
+    }
+    /* toggle on */
+    input[type="radio"].radio_1:checked ~ label:before {
+      content:'\2714' !important;
+      text-indent: 2px !important;
+      color: white !important;
+      background-color: #00E676 !important;
+    }
+    input[type="radio"].radio_1:checked ~ label {
+      color: #777 !important;
+      background-color: #00E676 !important;
+      color:white !important;
+    }
+  /*BOOKED SLOTS*/
+/*----------------------------------------------------------------------------*/
+  /* hide input */
+  input[type="radio"].radio_2:empty {
+    margin-left: -77px !important;
+  }
+  /* style label */
+  input[type="radio"].radio_2:empty ~ label {
+    position: relative !important;
+    float: left !important;
+    line-height: 15px !important;
+    text-indent: 20px !important;
+    margin-top: 0px;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    background-color: #E53935 !important;
+    color:white;
+  }
+  input[type="radio"].radio_2:empty ~ label:before {
+    position: absolute !important;
+    display: block !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    content:'\2714' !important;
+    text-indent: 2px !important;
+    width: 15px !important;
+    background-color: #E53935 !important;
+    /*border-radius: 3px 0 0 3px !important;*/
+  }
+  /* toggle hover */
+  input[type="radio"].radio_2:hover:not(:checked) ~ label:before {
+    content:'\2714' !important;
+    text-indent: 2px !important;
+    color: white !important;
+    cursor:not-allowed !important;
+  }
+  input[type="radio"].radio_2:hover:not(:checked) ~ label {
+    color: white !important;
+    cursor:not-allowed !important;
+  }
+
+  /*pending SLOTS*/
+/*----------------------------------------------------------------------------*/
+  /* hide input */
+  input[type="radio"].radio_3:empty {
+    margin-left: -77px !important;
+  }
+  /* style label */
+  input[type="radio"].radio_3:empty ~ label {
+    position: relative !important;
+    float: left !important;
+    line-height: 15px !important;
+    text-indent: 20px !important;
+    margin-top: 0px;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    background-color: #FF6F00 !important;
+    color:white;
+  }
+  input[type="radio"].radio_3:empty ~ label:before {
+    position: absolute !important;
+    display: block !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    content:'\2714' !important;
+    text-indent: 2px !important;
+    width: 15px !important;
+    background-color: #FF6F00 !important;
+    /*border-radius: 3px 0 0 3px !important;*/
+  }
+  /* toggle hover */
+  input[type="radio"].radio_3:hover:not(:checked) ~ label:before {
+    content:'\2714' !important;
+    text-indent: 2px !important;
+    color: white !important;
+    cursor:not-allowed !important;
+  }
+  input[type="radio"].radio_3:hover:not(:checked) ~ label {
+    color: white !important;
+    cursor:not-allowed !important;
+  }
