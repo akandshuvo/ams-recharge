@@ -97,7 +97,7 @@
 
         <?php //if($_SESSION['user_level']==1):?>
           <li class="treeview">
-            <a href="#"><i class="fa fa-user"></i> <span>Recharge</span>
+            <a href="#"><i class="fa fa-money"></i> <span>Recharge</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>

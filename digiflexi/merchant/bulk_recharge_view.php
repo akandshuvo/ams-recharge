@@ -1,7 +1,8 @@
 <?php
-//SESSION,DB CONNECTION,OTHER QUERIES
-     session_start();
-     include ('../dbconfig.php'); // database connection
+    # => SESSION,DB CONNECTION,OTHER QUERIES
+    ob_start();
+    session_start();
+    include ('../dbconfig.php'); // database connection
 
     # => CHECK IF THE USER IS LOGGED IN
     if($_SESSION['is_login']!=1){
@@ -216,7 +217,7 @@
             ?>
                 <form action="bulk_recharge_disburse.php" method="post">
                     <?php
-                      $rows = $conn->query("SELECT id FROM recharge WHERE merchant_username='$merchant_username'")->fetchAll(PDO::FETCH_ASSOC);
+                      $rows = $conn->query("SELECT id FROM recharge WHERE merchant_username='$merchant_username' AND recharge_status = 0 ")->fetchAll(PDO::FETCH_ASSOC);
                       foreach ($rows as $row) { echo '<input type="hidden" name="id[]" value="'. $row['id']. '">';;}
                     ?>
                     <center><button class="btn btn-info btn-disabled" type="submit" name="disburse">DISBURSE</button></center>

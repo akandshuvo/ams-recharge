@@ -1,15 +1,13 @@
 <?php
-//SESSION,DB CONNECTION,OTHER QUERIES
-session_start();
-include ('../dbconfig.php'); // database connection
+  # => SESSION,DB CONNECTION,OTHER QUERIES
+  ob_start();
+  session_start();
+  include ('../dbconfig.php'); // database connection
 
-# => CHECK IF THE USER IS LOGGED IN
-
-if($_SESSION['is_login']!=1){
-  header("location:../index.php");
-}
-
-
+  # => CHECK IF THE USER IS LOGGED IN
+  if($_SESSION['is_login']!=1){
+    header("location:../index.php");
+  }
  
 ?>
 

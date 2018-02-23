@@ -1,7 +1,8 @@
 <?php
 //SESSION,DB CONNECTION,OTHER QUERIES
- include ('../dbconfig.php'); // database connection
- include('../license.php');
+  ob_start();
+  session_start();
+  include ('../dbconfig.php'); // database connection
 ?>
 
 <!DOCTYPE html>
@@ -31,28 +32,34 @@
       </h1>
     </section>
 
-  <!-- Main content -->
-    <section class="content">
-        <div class="row">
+    <section>
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
           <div class="box">
-            <!-- /.box-header -->
             <div class="box-body">
-                
-                <form action="index.php" method="post">
-                    <div class="form-group row">
-                        <label for="from" class="col-sm-1 col-sm-offset-2 col-form-label">From</label></label>
-                        <div class="col-sm-2">
-                            <input  type="date" class="form-control" id="from" name="from" value="" >
-                        </div>
-                        <label for="to" class="col-sm-1 col-form-label">To</label></label>
-                        <div class="col-sm-2">
-                            <input  type="date" class="form-control" id="to" name="to">
-                        </div>
-                        <div class="col-sm-2">
-                            <button class="btn btn-success" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
+              <form action="index.php" method="post">
+                <div class="form-group row">
+                  <label for="from" class="col-sm-1 col-sm-offset-2 col-form-label">From</label></label>
+                  <div class="col-sm-3">
+                    <input  type="date" class="form-control" id="from" name="from" value="" >
+                  </div>
+                  <label for="to" class="col-sm-1 col-form-label">To</label></label>
+                  <div class="col-sm-3">
+                    <input  type="date" class="form-control" id="to" name="to">
+                  </div>
+                  <div class="col-sm-2">
+                    <button class="btn btn-success" type="submit">Search</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
                 
             <?php  		
           if (isset($_POST['from'])){
@@ -69,7 +76,16 @@
     		
     			$rows = $conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
 			    ?>    
-                
+                  <!-- Main content -->
+    <section class="content">
+        <div class="row">
+         <div class="col-sm-6 col-sm-offset-3">
+
+         </div> 
+
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
@@ -114,13 +130,14 @@
                     </tfoot>
                 </table>
                 <center><a class="btn btn-info" target="_blank" href="report_download.php?from=<?php echo $from ?>&to=<?php echo $to ?>">Download</a></center>
-            <?php }?>
-            </div>
+                </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
       </div>
     </section>
+            <?php }?>
+
   </div>
   <!-- /.content-wrapper -->
   

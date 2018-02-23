@@ -1,5 +1,6 @@
 <?php
   date_default_timezone_set('Asia/Dhaka');
+  ob_start();
   session_start();
   include('dbconfig.php');
   if($_SESSION['is_login'] !=1){
@@ -15,7 +16,7 @@
   <!--include header-->
   <?php include('header.php')?>
 </head>
-
+<?php include('preloader.php');?>
 
 <body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <div class="wrapper">

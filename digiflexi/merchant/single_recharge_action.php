@@ -1,10 +1,9 @@
 <?php
 # => ERROR REPORTING 0
-
 error_reporting(0);
 
 # => STARTING THE SESSION
-
+ob_start();
 session_start();
 
 # => DATABASE CONNECTION FILE
@@ -23,22 +22,68 @@ $msisdn             = $_POST['msisdn'];
 $amount             = $_POST['amount'];
 $msisdn_type        = $_POST['msisdn_type'];
 $merchant_username  = $_SESSION['username'];
+$operator_prefix    = substr($msisdn,0,3);
+
+# => Operator prefix    
+if($operator_prefix == '015'){$operator_name="Teletalk";}               // Teletalk
+elseif($operator_prefix == '016'){$operator_name="Airtel";}             // Airtel
+elseif($operator_prefix == '017'){$operator_name="Grameenphone";}       // GRAMEENPHONE
+elseif($operator_prefix=='018'){$operator_name="Robi";}                 // Robi
+elseif($operator_prefix=='019'){$operator_name="Banglalink";}           // Banglalink
+else{$operator_name="";}
 
 # => MSISDN VALIDATION
+
+$msisdn_length                      = strlen($msisdn);
+$msisdn_operator_code               = substr($msisdn);
+$msisdn_operator_code_suffix        = substr($msisdn);
 
 if(preg_match('/[a-zA-Z]/i', $msisdn)){
   header("location:single_recharge.php?wrongmsisdn");die;
 }
 
+if($msisdn_length==11 && !preg_match('/[a-zA-Z]/i', $msisdn)   && $msisdn_operator_code ="015" || $msisdn_operator_code ="017" || $msisdn_operator_code ="018" || $msisdn_operator_code ="016"){
+  //$status =0; // 0 = number is pending for recharge
+}else{
+  //$status =2; // 2 = there is something wrong with the number.
+  header("location:single_recharge.php?wrongmsisdn");die;
+}
+
 # => DIGIFLEXILOAD ID GENERATION
 
-$digiflexi_id = "DGF".date('md').time().rand(100,999);
+$digiflexi_id = "DGF".date('Ymd').time().rand(1000,9999);
 
 
 # => INSERT RECHARGE INFORMATION IN DATABASE
 
-$query = "INSERT INTO recharge(digiflexi_id,digi_id,response_code,message,response_time,operator_id,msisdn,amount,merchant_username)
-                                VALUES(:digiflexi_id,:digi_id,:response_code,:message,:response_time,:operator_id,:msisdn,:amount,:merchant_username)
+$query = "INSERT INTO recharge(
+                                digiflexi_id,
+                                  digi_id,
+                                    response_code,
+                                      message,
+                                        response_time,
+                                          operator_id,
+                                            operator_name,
+                                              msisdn,
+                                                msisdn_type,
+                                                  amount,
+                                                    merchant_username,
+                                                      recharge_status 
+                              )
+                        VALUES(
+                                :digiflexi_id,
+                                  :digi_id,
+                                    :response_code,
+                                      :message,
+                                        :response_time,
+                                          :operator_id,
+                                            :operator_name,
+                                              :msisdn,
+                                                :msisdn_type,
+                                                  :amount,
+                                                    :merchant_username,
+                                                      :recharge_status
+                              )
         ";
 
 $insert=$conn->prepare($query);
@@ -48,9 +93,12 @@ $insert->bindValue(':response_code',$response_code);
 $insert->bindValue(':message',$message);
 $insert->bindValue(':response_time',$response_time);
 $insert->bindValue(':operator_id',$operator_id);
+$insert->bindValue(':operator_name',$operator_name);
 $insert->bindValue(':msisdn',$msisdn);
+$insert->bindValue(':msisdn_type',$msisdn_type);
 $insert->bindValue(':amount',$amount);
 $insert->bindValue(':merchant_username',$merchant_username);
+$insert->bindValue(':recharge_status',3);
 $insert->execute();
 
 
@@ -62,66 +110,10 @@ $balance_deduct = intval($merchant_balance)-intval($amount);
 $admin_balance_update = $conn->query("UPDATE user SET balance=$balance_deduct WHERE username='$merchant'");
 
 
-# => RESOURCES FOR SOAP API REQUEST
-
-require('nusoap.php');
-$c = new soapclient('http://116.193.217.182/api/api.php?wsdl');
-$digipay_merchant_username = 'digiflexi';
-$digipay_merchant_password = 'dg344i';
-
-
-
-
-
-
-
-# =>CREATING TOP UP REQUEST
-
-$recharge_createTopup = $c->createTopup("$digipay_merchant_username","$digipay_merchant_password","$digiflexi_id","$msisdn",$amount,"$msisdn_type","http://116.193.217.182", "DIGICON FlexiLoad");
-$digi_id = $recharge_createTopup->digi_id;
-
-
-# => MAKE TOPUP
-
-$recharge_sendTopupRequest = $c->sendTopupRequest($digi_id,"$digipay_merchant_username","$digipay_merchant_password");
-
-# => RESPONSES GETTING FROM API REQUEST
-
-$digi_id = $recharge_sendTopupRequest->digi_id;
-$response_code = $recharge_sendTopupRequest->response;
-$message = $recharge_sendTopupRequest->message;
-$response_time = $recharge_sendTopupRequest->res_time;
-$operator_id = $recharge_sendTopupRequest->operator_res_id;
-
-
-# => UPDATE RECHARGE INFORMATION
-
-$update_query = "UPDATE recharge SET
-                                      digi_id       = '$digi_id',
-                                      response_code = '$response_code',
-                                      message       = '$message',
-                                      response_time = '$response_time',
-                                      operator_id   = '$operator_id'
-
-                  WHERE digiflexi_id ='$digiflexi_id' ";
-
-$update_query_execute = $conn->query($update_query);
 
 # => HEADING BACK TO DASHBOARD
 
-header("location:../dashboard.php");
+header("location:../merchant/recharge_status.php");
 
-//01704697287
-//ini_set("soap.wsdl_cache_enabled", 0);
-//$res = $c->cancelRecharge('123456', 'test001', 'silvercloud');
-//SEND REQUEST FOR TOP
-//$digi_id = "DG07151500081953994";
-//echo $digi_id;
-//FIND TOP UP INFORMATION
-//$recharge_findTopup = $c->findTopup($digi_id,'testmerchant','dg344i');
-//print_r($recharge_createTopup);
-//echo "<pre>";print_r($recharge_sendTopupRequest);echo "</pre>";
-
-//print_r($recharge_findTopup);
 
 ?>

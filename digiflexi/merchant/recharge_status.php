@@ -7,6 +7,25 @@
     if($_SESSION['is_login']!=1){
       header("location:../index.php");
     }
+    if($_GET['page']){
+      $page = $_GET['page'];
+     }else{
+       $page = 1;
+     }
+    
+     if($_GET['perpage']){
+      $perpage = $_GET['perpage'];
+     }else{
+       $perpage = 10;
+     }
+    
+       //positioning
+      $start = ($page > 1) ? ($page*$perpage)-$perpage: 0;
+    
+      # => PAGE COUNT
+      $merchant_username = $_SESSION['username'];
+      $total 	= $conn->query("SELECT id FROM recharge  WHERE merchant_username='$merchant_username' AND recharge_status=1")->rowCount(); //status = 1  => recharge request has been done. 
+      $pages = ceil($total/$perpage);
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +37,7 @@
   <!--include header-->
   <?php include('../header.php')?>
 </head>
-
+<?php include('../preloader.php');?>
 <body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <div class="wrapper">
 
@@ -41,12 +60,12 @@
             <div class="col-sm-12">
                 <div class="box">
                     <div class="box-body">
-                        <table id="example1" class="text-center table table-bordered table-hover">
+                        <table id="" class="text-center table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>DIGIFLEXI ID</th>
                                     <th>MSISDN</th>
+                                    <th>OPERATOR</th>
                                     <th>AMOUNT</th>
                                     <th>PREPAID/POSTPAID</th>
                                     <th>STATUS</th>
@@ -60,18 +79,18 @@
                                     $today              =   date("d_m_Y");
                                     $tablename          =   $merchant_username."_".$today;
 
-                                    $rows = $conn->query("SELECT * from recharge WHERE merchant_username='$merchant_username'")->fetchAll(PDO::FETCH_ASSOC);
+                                    $rows = $conn->query("SELECT * from recharge WHERE merchant_username='$merchant_username' ORDER BY id DESC LIMIT {$start},{$perpage}")->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($rows as $row){
                                 ?>
                                             <tr>
-                                                <td>
-                                                  <?php echo $row['id'];?>
-                                                </td>
                                                 <td>
                                                   <?php echo $row['digiflexi_id'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $row['msisdn'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $row['operator_name'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $row['amount'];?>
@@ -88,6 +107,76 @@
                                 ?>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="box-footer">
+                      <div class="col-sm-6">
+                        <div class="text-left">
+                          <?php 
+                              $to =$start+$perpage;
+                              echo "Showing ". $start ." to ".$to." of ".$total." entries " ;
+                          ?>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="text-right">
+                          <nav aria-label="..." class="" style="margin-top:-25px;"> 
+                              <ul class="pagination">
+                                <?php
+                                if($page == 1){
+                                ?>
+                                  <li class="disabled"><a><span aria-hidden="true" class="fa fa-angle-double-left"></span></a>     </li>
+                                <?php
+                                }
+                                else{
+                                ?>  
+                                  <li class=""><a href="recharge_status.php?page=<?php echo $page-1;?>&perpage=<?php echo $perpage ?>" aria-label="Previous"><span aria-hidden="true" class="fa fa-angle-double-left"></span></a></li>
+                                <?php  
+                                }
+                                ?>    
+
+                                <?php
+                                if($page == 1){;
+                                ?>
+                                <?php
+                                }
+                                else{
+                                ?>  
+                                  <li class=""><a href="recharge_status.php?page=<?php echo $page-1;?>&perpage=<?php echo $perpage ?>" aria-label="Previous"><?php echo $page-1;?></a></li>
+                                <?php  
+                                }
+                                ?> 
+                                <?php 
+                                  for($x=$page;$x<=$pages;$x++){
+                                    if($x <= $pages){
+                                ?>
+                                    <li <?php if($page === $x){echo 'class="active"';}?>>
+                                      <a href="recharge_status.php?page=<?php echo $x?>&perpage=<?php echo $perpage ?>">
+                                        <?php echo $x; ?>
+                                      </a>
+                                    </li>
+                                <?php
+                                    } 
+                                  }
+                                ?>
+
+
+                                <?php
+                                if($page == $pages){
+                                ?>
+                                  <li class="disabled"><a><span aria-hidden="true" class="fa fa-angle-double-right"></span></a>     </li>
+                                <?php
+                                }
+                                else{
+                                ?>  
+                                  <li class=""><a href="recharge_status.php?page=<?php echo $page+1;?>&perpage=<?php echo $perpage ?>" aria-label="Previous"><span aria-hidden="true" class="fa fa-angle-double-right"></span></a></li>
+                            
+                                <?php  
+                                }
+                                ?> 
+                              </ul>
+                          </nav>
+                        </div>
+                      </div>                          
                     </div>
                 </div>
             </div>

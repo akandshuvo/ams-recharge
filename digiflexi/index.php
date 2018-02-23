@@ -37,7 +37,6 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
-
     <form action="/digiflexi/scripts/checklogin.php" method="post">
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name="user_id" placeholder="Your User Name">
@@ -66,6 +65,9 @@
 <div class="row text-center">
   copyright <?php echo date("Y") ?> &copy; Digicon Technologies Ltd.
 </div>
+
+
+
 
 <!--INCLUDING FOOTER-->
 <!-- REQUIRED JS SCRIPTS -->

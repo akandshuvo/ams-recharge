@@ -1,6 +1,11 @@
 
 
+
+
+<!--NOTIFICATION-->
 <div id="notification"></div>
+
+
 
   <!-- REQUIRED JS SCRIPTS -->
 
@@ -60,5 +65,4 @@
     });
     setTimeout(getAjaxRequest,5000); //call the same function every 1s.
   }
-
   </script>

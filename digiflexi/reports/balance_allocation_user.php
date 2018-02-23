@@ -1,5 +1,7 @@
 <?php
 //SESSION,DB CONNECTION,OTHER QUERIES
+ob_start();
+session_start();
  include ('../dbconfig.php'); // database connection
 ?>
 
